@@ -1,0 +1,206 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SystemMonitor.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+        x:Class="SystemMonitor.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="System Monitor"
+        Width="1200" Height="800"
+        MinWidth="900" MinHeight="600"
+        Background="#1a1a2e">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="20">
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="System Monitor"
+                   FontSize="28" FontWeight="Bold"
+                   Foreground="#e0e0e0"
+                   Margin="0,0,0,15"/>
+
+        <!-- Alert Bar -->
+        <Border Grid.Row="1"
+                Background="#4a1a1a"
+                CornerRadius="8"
+                Padding="15,10"
+                Margin="0,0,0,15"
+                IsVisible="{Binding HasAlert}">
+            <TextBlock Text="{Binding AlertText}"
+                       Foreground="#ff6b6b"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" RowDefinitions="*,*" Margin="0,0,0,10">
+
+            <!-- CPU Chart -->
+            <Border Grid.Row="0" Grid.Column="0"
+                    Background="#16213e"
+                    CornerRadius="12"
+                    Padding="15"
+                    Margin="0,0,8,8">
+                <Grid RowDefinitions="Auto,*">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="CPU"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="DeepSkyBlue"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CpuUsage, StringFormat='{}{0:F1}%'}"
+                                   FontSize="24" FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="15,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding CpuSeries}"
+                                        XAxes="{Binding TimeAxis}"
+                                        YAxes="{Binding CpuYAxis}"
+                                        AnimationsSpeed="00:00:00"
+                                        TooltipPosition="Hidden"/>
+                </Grid>
+            </Border>
+
+            <!-- RAM Chart -->
+            <Border Grid.Row="0" Grid.Column="1"
+                    Background="#16213e"
+                    CornerRadius="12"
+                    Padding="15"
+                    Margin="8,0,0,8">
+                <Grid RowDefinitions="Auto,*">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="RAM"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="MediumPurple"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding RamUsagePercent, StringFormat='{}{0:F1}%'}"
+                                   FontSize="24" FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="15,0,0,0"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding RamText}"
+                                   FontSize="12"
+                                   Foreground="Gray"
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding RamSeries}"
+                                        XAxes="{Binding TimeAxis}"
+                                        YAxes="{Binding RamYAxis}"
+                                        AnimationsSpeed="00:00:00"
+                                        TooltipPosition="Hidden"/>
+                </Grid>
+            </Border>
+
+            <!-- Network Chart -->
+            <Border Grid.Row="1" Grid.Column="0"
+                    Background="#16213e"
+                    CornerRadius="12"
+                    Padding="15"
+                    Margin="0,8,8,0">
+                <Grid RowDefinitions="Auto,*">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="Network"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="MediumSeaGreen"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock FontSize="12" Foreground="Orange"
+                                   Margin="15,0,0,0"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="↑ {0}">
+                                    <Binding Path="NetworkSentText"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock FontSize="12" Foreground="MediumSeaGreen"
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="↓ {0}">
+                                    <Binding Path="NetworkReceivedText"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding NetworkSeries}"
+                                        XAxes="{Binding TimeAxis}"
+                                        YAxes="{Binding NetworkYAxis}"
+                                        AnimationsSpeed="00:00:00"
+                                        TooltipPosition="Hidden"/>
+                </Grid>
+            </Border>
+
+            <!-- Disk -->
+            <Border Grid.Row="1" Grid.Column="1"
+                    Background="#16213e"
+                    CornerRadius="12"
+                    Padding="15"
+                    Margin="8,8,0,0">
+                <Grid RowDefinitions="Auto,*">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="Disk"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="Coral"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding DiskUsagePercent, StringFormat='{}{0:F1}%'}"
+                                   FontSize="24" FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="15,0,0,0"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding DiskText}"
+                                   FontSize="12"
+                                   Foreground="Gray"
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Disk bar visualization -->
+                    <Grid Grid.Row="1" VerticalAlignment="Center" Margin="0,20">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <!-- Big percentage -->
+                            <TextBlock Text="{Binding DiskUsagePercent, StringFormat='{}{0:F1}%'}"
+                                       FontSize="48" FontWeight="Bold"
+                                       Foreground="Coral"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,15"/>
+
+                            <!-- Progress bar background -->
+                            <Border Background="#2a2a4a"
+                                    CornerRadius="8"
+                                    Height="20"
+                                    Width="300">
+                                <Border Background="Coral"
+                                        CornerRadius="8"
+                                        Height="20"
+                                        HorizontalAlignment="Left"
+                                        Width="{Binding DiskUsagePercent, Converter={x:Static vm:PercentToWidthConverter.Instance}}"/>
+                            </Border>
+
+                            <TextBlock Text="{Binding DiskText}"
+                                       FontSize="14"
+                                       Foreground="Gray"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Footer -->
+        <TextBlock Grid.Row="3"
+                   Text="Refreshing every 1s"
+                   FontSize="11"
+                   Foreground="#555"
+                   HorizontalAlignment="Right"/>
+    </Grid>
+</Window>
