@@ -4,6 +4,10 @@
 
 ![스크린샷](screenshot.png)
 
+## 데모
+
+https://github.com/user-attachments/assets/9bba7711-91fc-4fed-912f-b5a0ed34df78.mov
+
 ## 주요 기능
 
 - CPU 사용률 실시간 그래프
