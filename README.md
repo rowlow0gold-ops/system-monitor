@@ -2,8 +2,6 @@
 
 실시간 시스템 성능 모니터링 데스크톱 앱입니다. Avalonia UI와 .NET으로 만들었으며, macOS/Windows/Linux에서 실행 가능합니다.
 
-![스크린샷](screenshot.png)
-
 ## 데모
 
 https://github.com/user-attachments/assets/9bba7711-91fc-4fed-912f-b5a0ed34df78.mov
